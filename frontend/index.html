@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA</title>
+
+    <link rel="stylesheet" href="/../static/css/index.css">
+
+
+</head>
+<body>
+
+<nav class="nav"> <!--навигационные ссылки - нужны для перехода на другие вкладки-->
+    <a href="/" class="nav__link" data-link>Главная</a> <!-- дата-линки - это такой атрибут, с помощью которого наши
+        переходы с вкладки на вкладку фиксируются историей, т.е. при использовании стрелок назад вперед у браузера
+    всё будет корерктно работать-->
+
+    <a href="/add_abonent" class="nav__link" data-link>Добавить нового абонента</a>
+    <a href="/add_group" class="nav__link" data-link>Добавить категорию абонентов</a>
+    <a href="/search_abonent" class="nav__link" data-link>Поиск абонентов</a>
+    <a href="/add_group_admin" class="nav__link" data-link>Добавить администратора категории</a>
+</nav>
+<div id="app"></div><!--с помощью id app мы можем использовать express и работать на своем локальном сервере
+        без возникновения проблем по типу ошибок с загрузкой скриптов-->
+
+<script type="module" src="/../static/js/index.js"></script>
+
+
+
+</body>
+</html>
