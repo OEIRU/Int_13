@@ -49,7 +49,7 @@ export default class extends AbstractView{
 
             var abonent = JSON.parse(localStorage.getItem(obj.name));
             console.log(abonent);
-            if(abonent.password == "Mega_Admin" && obj.password == "Mega_Admin"){
+          if (abonent && abonent.password == "Mega_Admin" && obj.password == "Mega_Admin") {
                 document.getElementById('ist').innerHTML= "Верный пароль.";
                 document.getElementById("control").disabled = false;
             }

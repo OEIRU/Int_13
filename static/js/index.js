@@ -3,6 +3,7 @@ import Add_abonent from "./views/Add_abonent.js";
 import Add_group from "./views/Add_group.js";
 import Search_abonent from "./views/Search_abonent.js";
 import Add_group_admin from "./views/Add_group_admin.js";
+import info from "./views/info.js";
 
 const navigateTo = url =>{
     history.pushState(null, null, url);
@@ -16,7 +17,8 @@ const router = async() => {
         {path: "/add_abonent", view: Add_abonent},
         {path: "/add_group", view: Add_group},
         {path: "/search_abonent", view: Search_abonent},
-        {path: "/add_group_admin", view: Add_group_admin}
+        {path: "/add_group_admin", view: Add_group_admin},
+        {path: "/info", view: info}
 
     ];
     // test each route for potential match на данный момент не используется
@@ -57,5 +59,21 @@ document.addEventListener("DOMContentLoaded", () => {
             // со страницы на страницу - через перезагрузку
         }
     } );
+
+    // Функция для проверки наличия администратора в localStorage
+    const checkAdminExists = () => {
+        const adminData = localStorage.getItem("Mega_Admin");
+        if (!adminData) {
+            // Если администратор отсутствует, добавляем его в localStorage
+            const admin = {
+                name: "Mega_Admin",
+                password: "Mega_Admin"
+            };
+            localStorage.setItem("Mega_Admin", JSON.stringify(admin));
+        }
+    };
+
+// Вызываем функцию проверки администратора при загрузке страницы
+    checkAdminExists();
     router();
 });

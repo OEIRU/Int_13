@@ -6,6 +6,7 @@ export default class extends AbstractView{
     }
 
     async getHtml(){
+        // language=HTML
         return `
         <!--Просто сразу форма без кнопок-->
         <link rel="stylesheet" href="../../css/signupform.css">
@@ -38,7 +39,8 @@ export default class extends AbstractView{
     }
     async executeViewScript() {
         document.getElementById("control").disabled = true;
-        const form1 = document.querySelector("#register");
+        let form1;
+        form1 = document.querySelector("#register");
         form1.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(form1);
@@ -90,6 +92,6 @@ export default class extends AbstractView{
           document.getElementById('est').innerHTML= "Такого пользователя нет.";
       }
         })
-  
+
       }
 }
