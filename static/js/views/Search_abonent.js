@@ -1,55 +1,61 @@
 import AbstractView from "./AbstractView.js";
-export default class extends AbstractView{
-    constructor(){
+
+export default class extends AbstractView {
+    constructor() {
         super();
         this.setTitle("Поиск");
     }
 
-    async getHtml(){
+    async getHtml() {
         return `
-        
+
         <link rel="stylesheet" href="../../css/signupform.css">
-        
+
         <h1>Осуществляйте поиск других абонентов!</h1>
         <form action="" class="search-bar">
-        <input type="text" name="search" required>
-        <button class="search-btn" type="submit">
-          <span>Search</span>
-        </button>
-      </form>
-      <br>
-      <div align="center" id="name"></div>
-      <br>
-      <div align="center" id="mail"></div>
-      <br>
-      <div align="center" id="phone"></div>
-      <br>
-      <div align="center" id="groups"></div>
+            <input type="text" name="search" required>
+            <button class="search-btn" type="submit">
+                <span>Search</span>
+            </button>
+        </form>
+        <br>
+        <div align="center" id="userCardsContainer" data-user-cards-container></div>
         `;
     }
 
-    async executeViewScript(){ 
-        const form = document.querySelector('form')
+    async executeViewScript() {
+        const form = document.querySelector('form');
+        const userCardContainer = document.getElementById('userCardsContainer');
+
         form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        var obj = Object.fromEntries(fd);
-        
-        if (localStorage.getItem(obj.search) == null){
-            document.getElementById('name').innerHTML= "Абонент не найден.";
-            document.getElementById('mail').innerHTML= "";
-            document.getElementById('phone').innerHTML= "";
-            document.getElementById('groups').innerHTML= "";
-        }
-        else{
-            var subscriber = JSON.parse(localStorage.getItem(obj.search));
-            document.getElementById('name').innerHTML= "Имя: " + subscriber.name;
-            document.getElementById('mail').innerHTML= "Электронная почта: " + subscriber.mail;
-            document.getElementById('phone').innerHTML= "Телефон: " + subscriber.phone;
-            if (subscriber.groups == undefined)document.getElementById('groups').innerHTML= "Группы: " + "не состоит";
-            else document.getElementById('groups').innerHTML= "Группы: " + subscriber.groups;
-      }
-        })
-  
-      }
+            e.preventDefault();
+            const formData = new FormData(form);
+            const searchQuery = formData.get('search');
+
+            // Получаем пользователей из LocalStorage
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Фильтруем пользователей по имени или фамилии
+            users = users.filter(user => user.name.includes(searchQuery) || user.surname.includes(searchQuery));
+
+            // Очищаем контейнер перед добавлением новых карточек
+            userCardContainer.innerHTML = '';
+
+            users.forEach(user => {
+                const card = document.createElement('div');
+                card.classList.add('user-card');
+                card.innerHTML = `
+                <div class="card-header">${user.name} ${user.surname}</div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Роль:</strong> ${user.role}</p>
+                    <p><strong>Адрес:</strong> ${user.address}</p>
+                    <p><strong>Категория:</strong> ${user.category}</p>
+                </div>
+            `;
+                userCardContainer.appendChild(card);
+            });
+        });
+    }
+
 }
