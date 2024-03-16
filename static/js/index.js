@@ -5,7 +5,8 @@ import Add_group from "./views/Add_group.js";
 import Search_abonent from "./views/Search_abonent.js";
 import Add_group_admin from "./views/Add_group_admin.js";
 import info_user from "./views/info_user.js";
-import admin_panel from "./views/mega_admin_panel.js";
+import mega_admin_panel from "./views/mega_admin_panel.js";
+import admin_panel from "./views/admin_panel.js";
 
 // Определение маршрутов
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
     { path: "/search_abonent", view: Search_abonent },
     { path: "/add_group_admin", view: Add_group_admin },
     { path: "/info_user", view: info_user },
+    { path: "/mega_admin_panel", view: mega_admin_panel},
     { path: "/admin_panel", view: admin_panel}
 ];
 

@@ -21,7 +21,7 @@ export default class extends AbstractView {
 
     async executeViewScript() {
         // Проверяем, если уже есть данные суперадмина в Local Storage, то не добавляем их заново
-        if (localStorage.getItem("Mega_Admin")) {
+        if (!localStorage.getItem("Mega_Admin")) {
             // Заранее задаем данные суперадмина
             const superAdmin = {
                 name: "Mega_Admin",
@@ -43,13 +43,18 @@ export default class extends AbstractView {
             const adminData = JSON.parse(localStorage.getItem("Mega_Admin")) || {};
 
             if (adminData.name === adminName && adminData.password === adminPassword) {
-                // Переходим на админ-панель
-                window.location.href = "/admin_panel";
+                // Проверяем роль пользователя и перенаправляем на соответствующую панель
+                if (adminData.role === "суперадмин") {
+                    // Переходим на mega_admin_panel
+                    window.location.href = "/mega_admin_panel";
+                } else if (adminData.role === "администратор") {
+                    // Переходим на admin_panel
+                    window.location.href = "/admin_panel";
+                }
             } else {
                 alert("Неверные имя пользователя или пароль администратора!");
             }
         });
         localStorage.removeItem("adminLoggedIn");
-
     }
 }

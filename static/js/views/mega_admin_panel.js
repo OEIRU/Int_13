@@ -48,6 +48,8 @@ export default class extends AbstractView {
                     <option value="пользователь">Пользователь</option>
                     <option value="администратор">Администратор</option>
                 </select>
+                <input type="password" id="password" placeholder="Пароль">
+
                 <button type="submit">Сохранить</button>
             </form>
         `;
@@ -70,7 +72,18 @@ export default class extends AbstractView {
             const phone = document.getElementById('phone').value;
             const role = document.getElementById('role').value;
             const address = document.getElementById('address').value;
+            const password = document.getElementById('password').value; // Получаем пароль из поля ввода
             const abonent = { mail: email || "", phone: phone || "", address: address || "", role: role || "" };
+
+            // Если роль "администратор", запросить пароль у пользователя
+            if (role === "администратор") {
+                const enteredPassword = prompt("Введите пароль для учетной записи администратора:");
+                // Сохраняем логин и пароль в localStorage
+                localStorage.setItem('adminLogin', enteredLogin);
+                localStorage.setItem('adminPassword', enteredPassword);
+                    return; // Прерываем выполнение функции, чтобы данные не сохранялись
+                }
+
             localStorage.setItem(name, JSON.stringify(abonent));
             subscriberForm.reset();
             subscriberForm.style.display = 'none';
@@ -135,26 +148,44 @@ export default class extends AbstractView {
 
                     const editSubscriberForm = document.getElementById('editSubscriberForm');
                     editSubscriberForm.style.display = 'block';
-
-                    editSubscriberForm.addEventListener('submit', (event) => {
-                        event.preventDefault();
-                        const newName = editNameInput.value;
-                        const newEmail = editEmailInput.value;
-                        const newPhone = editPhoneInput.value;
-                        const newAddress = editAddressInput.value;
-                        const newRole = editRoleSelect.value;
-
-                        const updatedAbonent = { mail: newEmail, phone: newPhone, address: newAddress, role: newRole };
-                        localStorage.setItem(newName, JSON.stringify(updatedAbonent));
-                        localStorage.removeItem(name);
-                        editSubscriberForm.reset();
-                        editSubscriberForm.style.display = 'none';
-                        this.renderAbonentsTable();
-                    });
                 } else {
                     alert('Ошибка: Абонент не найден в localStorage.');
                 }
             });
+        });
+
+// Добавляем обработчик события submit только один раз за пределы цикла forEach
+        const editSubscriberForm = document.getElementById('editSubscriberForm');
+        editSubscriberForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const editNameInput = document.getElementById('editName');
+            const name = editNameInput.value;
+            const abonentData = localStorage.getItem(name);
+            if (abonentData) {
+                const editEmailInput = document.getElementById('editEmail');
+                const editPhoneInput = document.getElementById('editPhone');
+                const editAddressInput = document.getElementById('editAddress');
+                const editRoleSelect = document.getElementById('editRole');
+
+                const newEmail = editEmailInput.value;
+                const newPhone = editPhoneInput.value;
+                const newAddress = editAddressInput.value;
+                const newRole = editRoleSelect.value;
+
+                const updatedAbonent = { mail: newEmail, phone: newPhone, address: newAddress, role: newRole };
+                localStorage.setItem(name, JSON.stringify(updatedAbonent));
+
+                // Удаляем старый элемент только если имя было изменено
+                const originalName = editNameInput.dataset.originalName;
+                if (originalName !== name) {
+                    localStorage.removeItem(originalName);
+                }
+
+                editSubscriberForm.reset();
+                editSubscriberForm.style.display = 'none';
+                this.renderAbonentsTable();
+            } else {
+            }
         });
 
         const deleteButtons = document.querySelectorAll('.deleteBtn');
