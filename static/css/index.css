@@ -104,6 +104,19 @@ p{
     font-size: 14px;
 
   }
-  
-  
+
+.abonents-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.abonents-table th, .abonents-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+.abonents-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
   
