@@ -3,76 +3,100 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor() {
         super();
-        this.setTitle("Управление абонентами");
+        this.setTitle("Общая таблица абонентов");
     }
 
-    // Метод для получения HTML-разметки страницы
     async getHtml() {
-        // Получаем все записи из localStorage
-        const allEntries = Object.entries(localStorage);
-
-        // Формируем HTML-разметку для таблицы
-        let tableHtml = `
-            <h1>Управление абонентами</h1>
-            <table>
+        return `
+        <h1>Общая таблица абонентов</h1>
+        <div class="sort-menu">
+            <label for="sortBy">Сортировать по:</label>
+            <select id="sortBy">
+                <option value="name">Имени</option>
+                <option value="surname">Фамилии</option>
+                <option value="email">Электронной почте</option>
+                <option value="phone">Мобильному телефону</option>
+                <option value="address">Адресу</option>
+                <option value="category">Группе</option>
+            </select>
+            <select id="sortOrder">
+                <option value="asc">По возрастанию</option>
+                <option value="desc">По убыванию</option>
+            </select>
+            <button id="sortButton">Сортировать</button>
+        </div>
+        <table class="abonents-table">
+            <thead>
                 <tr>
                     <th>Имя</th>
+                    <th>Фамилия</th>
                     <th>Электронная почта</th>
                     <th>Мобильный телефон</th>
-                    <th>Категория</th> 
-                    <th>Адрес</th> 
-                </tr>`;
-
-        // Добавляем записи в таблицу
-        allEntries.forEach(([name, data]) => {
-            const abonent = JSON.parse(data);
-            tableHtml += `
-                <tr>
-                    <td>${name}</td>
-                    <td>${abonent.mail}</td>
-                    <td>${abonent.phone}</td>
-                    <td>${abonent.category}</td>
-                    <td>${abonent.address}</td>
-                </tr>`;
-        });
-
-        // Закрываем таблицу
-        tableHtml += `</table>`;
-
-        return tableHtml;
+                    <th>Адрес</th>
+                    <th>Группа</th>
+                </tr>
+            </thead>
+            <tbody id="abonentsTableBody"></tbody>
+        </table>
+        `;
     }
 
-    // Метод для выполнения скрипта на странице
     async executeViewScript() {
-        // Функция для редактирования абонента
-        window.editAbonent = (name) => {
-            // Получаем данные абонента из localStorage
-            const storedData = localStorage.getItem(name);
+        const sortButton = document.getElementById('sortButton');
 
-            // Проверяем наличие данных и открываем форму редактирования
-            if (storedData) {
-                try {
-                    const abonent = JSON.parse(storedData);
-                    const editFormHtml = `
-                        <h2>Редактирование данных абонента ${name}</h2>
-                        <form id="editForm">
-                            <label for="mail">Электронная почта</label>
-                            <input id="mail" name="mail" type="text" value="${abonent.mail}" autocomplete="on" required>
-                            <label for="phone">Мобильный телефон</label>
-                            <input id="phone" name="phone" type="text" value="${abonent.phone}" autocomplete="on" required>
-                            <label for="category">Категория</label>
-                            <input id="category" name="category" type="text" value="${abonent.category}" autocomplete="on" required>
-                            <label for="address">Адрес</label>
-                            <input id="address" name="address" type="text" value="${abonent.address}" autocomplete="on" required>
-                            <button type="submit">Сохранить изменения</button>
-                        </form>`;
-                    document.getElementById("view").innerHTML = editFormHtml;
-                } catch (error) {
-                    console.error("Ошибка при парсинге данных абонента:", error);
+        sortButton.addEventListener('click', () => {
+            const sortBy = document.getElementById('sortBy').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+            this.renderAbonentsTable(sortBy, sortOrder);
+        });
+
+        this.renderAbonentsTable();
+    }
+
+    renderAbonentsTable(sortBy = 'name', sortOrder = 'asc') {
+        const abonentsTableBody = document.getElementById('abonentsTableBody');
+        abonentsTableBody.innerHTML = '';
+
+        const abonents = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const name = localStorage.key(i);
+            const data = localStorage.getItem(name);
+
+            try {
+                const abonent = JSON.parse(data);
+                if (abonent.role !== "суперадмин" && abonent.role !== "администратор") {
+                    const abonentWithDash = { ...abonent };
+                    for (const key in abonentWithDash) {
+                        if (abonentWithDash[key] === undefined) {
+                            abonentWithDash[key] = '-';
+                        }
+                    }
+                    abonents.push({ name, ...abonentWithDash });
                 }
-            } else {
-                console.error("Данные абонента не найдены в localStorage");
+            } catch (error) {
+                console.error("Ошибка при парсинге JSON:", error);
             }
-        };
+        }
+
+        abonents.sort((a, b) => {
+            const aValue = a[sortBy] || '';
+            const bValue = b[sortBy] || '';
+            if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        abonents.forEach(abonent => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${abonent.name || '-'}</td>
+                <td>${abonent.surname || '-'}</td>
+                <td>${abonent.email || '-'}</td>
+                <td>${abonent.phone || '-'}</td>
+                <td>${abonent.address || '-'}</td>
+                <td>${abonent.category || '-'}</td>
+            `;
+            abonentsTableBody.appendChild(row);
+        });
     }
 }

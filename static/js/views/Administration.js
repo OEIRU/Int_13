@@ -13,8 +13,8 @@ export default class extends AbstractView {
                 <label for="adminName">Логин:</label>
                 <input type="text" id="adminName" name="adminName" required> <br>
                 <label for="adminPassword">Пароль:</label>
-                <input type="password" id="adminPassword" name="adminPassword" required>
-                <button type="submit">Войти</button>
+                <input type="password" id="adminPassword" name="adminPassword" required><br>    
+                <button id="addSubscriberBtn" type="submit">Войти</button>
             </form>
         `;
     }

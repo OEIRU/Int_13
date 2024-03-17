@@ -1,77 +1,97 @@
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
+/* Устанавливаем общий шрифт для всего документа */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-/* Full-width input fields */
-input[type=text], input[type=password] {
+/* Устанавливаем box-sizing для всех элементов */
+* {
+  box-sizing: border-box;
+}
+
+/* Стили для полей ввода */
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=tel],
+#role {
   padding: 15px;
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
   background: #f1f1f1;
+  font: 1em Hind, sans-serif; /* Добавляем указание на шрифт */
+  line-height: 1.5em;
 }
 
-/* Add a background color when the inputs get focus */
-input[type=text]:focus, input[type=password]:focus {
+/* Добавляем стили при фокусировке на полях ввода */
+input[type=text]:focus,
+input[type=password]:focus,
+#role:focus {
   background-color: #ddd;
   outline: none;
 }
 
-/* Set a style for all buttons */
-button2 {
-  background-color: #04AA6D;
-  color: white;
-  padding: 15px 32px;
-  margin: 8px 0;
-  border: none;
+/* Стили для кнопок */
+button,
+button2,
+.cancelbtn,
+.signupbtn,
+.sort-menu button {
+  background-color: #ffffff; /* Green */
+  border: 1px solid #555555;
+  color: #000000;
+  padding: 10px 32px;
+  text-align: center;
+  font-size: 14px;
   cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
 }
 
-button2:hover {
-  opacity:1;
+/* Hover-эффект для кнопок */
+button:hover,
+button2:hover,
+.cancelbtn:hover,
+.signupbtn:hover,
+.sort-menu button:hover {
+  background-color: white;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #04AA6D;
 }
 
-/* Extra styles for the cancel button */
+/* Дополнительные стили для кнопки отмены */
 .cancelbtn {
-  padding: 15px 32px;
   background-color: #f44336;
 }
 
-/* Float cancel and signup buttons and add an equal width */
-.cancelbtn, .signupbtn {
-  float: left;
-  width: 14%;
-}
-
-/* Add padding to container elements */
+/* Стили для контейнера */
 .container2 {
   padding: 16px;
 }
 
-/* The Modal (background) */
+/* Стили для модального окна */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none; /* Скрываем по умолчанию */
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   background-color: #474e5d;
   padding-top: 50px;
 }
 
-/* Modal Content/Box */
+/* Стили для содержимого модального окна */
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  margin: 5% auto 15% auto;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%;
 }
- 
-/* The Close Button (x) */
+
+/* Стили для кнопки закрытия (x) */
 .close {
   position: absolute;
   right: 35px;
@@ -87,16 +107,40 @@ button2:hover {
   cursor: pointer;
 }
 
-/* Clear floats */
+/* Очищаем floats */
 .clearfix::after {
   content: "";
   clear: both;
   display: table;
 }
 
-/* Change styles for cancel button and signup button on extra small screens */
+/* Изменяем стили кнопок отмены и отправки на экранах с маленьким разрешением */
 @media screen and (max-width: 300px) {
-  .cancelbtn, .signupbtn {
-     width: 100%;
+  .cancelbtn,
+  .signupbtn {
+    width: 100%;
   }
+}
+
+/* Стили для сортировочного меню */
+.sort-menu {
+  display: flex;
+  align-items: center;
+}
+
+.sort-menu label {
+  margin-right: 10px;
+}
+
+.sort-menu select,
+.sort-menu button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.sort-menu select {
+  margin-right: 8px;
 }
