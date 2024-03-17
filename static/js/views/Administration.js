@@ -1,6 +1,5 @@
 import AbstractView from "./AbstractView.js";
-const infoUserBtn = document.getElementById("infoUserBtn");
-const searchAbonentBtn = document.getElementById("searchAbonentBtn");
+
 export default class extends AbstractView {
     constructor() {
         super();
@@ -16,11 +15,6 @@ export default class extends AbstractView {
                 <label for="adminPassword">Пароль:</label>
                 <input type="password" id="adminPassword" name="adminPassword" required>
                 <button type="submit">Войти</button>
-            </form>
-            <br>
-            <form>
-                <button type="button" id="infoUserBtn">Информация о пользователях</button>
-                <button type="button" id="searchAbonentBtn">Поиск абонента</button>
             </form>
         `;
     }
@@ -39,27 +33,28 @@ export default class extends AbstractView {
             localStorage.setItem("Mega_Admin", JSON.stringify(superAdmin));
         }
 
-        // Добавляем код кнопок после формы
         const adminLoginForm = document.getElementById("adminLoginForm");
-        adminLoginForm.insertAdjacentHTML('afterend', `
-        <form>
-            <button type="button" id="infoUserBtn">Информация о пользователях</button>
-            <button type="button" id="searchAbonentBtn">Поиск абонента</button>
-        </form>
-    `);
 
-        // Добавляем обработчики для кнопок перехода
-        const infoUserBtn = document.getElementById("infoUserBtn");
-        const searchAbonentBtn = document.getElementById("searchAbonentBtn");
+        adminLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const adminName = document.getElementById("adminName").value;
+            const adminPassword = document.getElementById("adminPassword").value;
 
-        infoUserBtn.addEventListener('click', () => {
-            window.location.href = "/info_user";
+            const adminData = JSON.parse(localStorage.getItem("Mega_Admin")) || {};
+
+            if (adminData.name === adminName && adminData.password === adminPassword) {
+                // Проверяем роль пользователя и перенаправляем на соответствующую панель
+                if (adminData.role === "суперадмин") {
+                    // Переходим на mega_admin_panel
+                    window.location.href = "/mega_admin_panel";
+                } else if (adminData.role === "администратор") {
+                    // Переходим на admin_panel
+                    window.location.href = "/admin_panel";
+                }
+            } else {
+                alert("Неверные имя пользователя или пароль администратора!");
+            }
         });
-
-        searchAbonentBtn.addEventListener('click', () => {
-            window.location.href = "/search_abonent";
-        });
-
         localStorage.removeItem("adminLoggedIn");
     }
 }

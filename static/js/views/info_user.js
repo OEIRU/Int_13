@@ -23,6 +23,24 @@ export default class extends AbstractView {
                     <th>Адрес</th> 
                 </tr>`;
 
+        // Добавляем записи в таблицу
+        allEntries.forEach(([name, data]) => {
+            const abonent = JSON.parse(data);
+            tableHtml += `
+                <tr>
+                    <td>${name}</td>
+                    <td>${abonent.mail}</td>
+                    <td>${abonent.phone}</td>
+                    <td>${abonent.category}</td>
+                    <td>${abonent.address}</td>
+                </tr>`;
+        });
+
+        // Закрываем таблицу
+        tableHtml += `</table>`;
+
+        return tableHtml;
+    }
 
     // Метод для выполнения скрипта на странице
     async executeViewScript() {
@@ -49,6 +67,12 @@ export default class extends AbstractView {
                             <button type="submit">Сохранить изменения</button>
                         </form>`;
                     document.getElementById("view").innerHTML = editFormHtml;
+                } catch (error) {
+                    console.error("Ошибка при парсинге данных абонента:", error);
+                }
+            } else {
+                console.error("Данные абонента не найдены в localStorage");
+            }
         };
     }
 }
