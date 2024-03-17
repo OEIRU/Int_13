@@ -11,5 +11,5 @@ app.get("/*", (req, res) =>
     // загружалась главная страничка без проблем. выгружаем index.html
 
 });
-app.listen(process.env.PORT || 3000, () => console.log("Server is running in 3000 port...")); // запускаем сервер с портом 5500
+app.listen(process.env.PORT || 3000, () => console.log("Server is running in 3000 port...")); // запускаем сервер с портом 3000
 // при успешном запуске сервера получаем сообщение, ждем подключений

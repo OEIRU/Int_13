@@ -24,7 +24,7 @@ export default class extends AbstractView{
       <br>
       <div align="center" id="phone"></div>
       <br>
-      <div align="center" id="groups"></div>
+      <div align="center" id="category"></div>
         `;
     }
 
@@ -46,8 +46,8 @@ export default class extends AbstractView{
             document.getElementById('name').innerHTML= "Имя: " + subscriber.name;
             document.getElementById('mail').innerHTML= "Электронная почта: " + subscriber.mail;
             document.getElementById('phone').innerHTML= "Телефон: " + subscriber.phone;
-            if (subscriber.groups == undefined)document.getElementById('groups').innerHTML= "Группы: " + "не состоит";
-            else document.getElementById('groups').innerHTML= "Группы: " + subscriber.groups;
+            if (subscriber.category == undefined)document.getElementById('category').innerHTML= "Группы: " + "не состоит";
+            else document.getElementById('category').innerHTML= "Группы: " + subscriber.category;
       }
         })
   
