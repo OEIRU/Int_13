@@ -9,25 +9,8 @@ export default class extends AbstractView {
     async getHtml() {
         return `
             <h1>Общая таблица абонентов</h1>
-  
+
             <table class="abonents-table">
-                                <div class="sort-menu">
-            <label for="sortBy">Сортировать по:</label>
-            <select id="sortBy">
-                <option value="name">Имени</option>
-                <option value="surname">Фамилии</option>
-                <option value="email">Электронной почте</option>
-                <option value="phone">Мобильному телефону</option>
-                <option value="address">Адресу</option>
-                <option value="category">Группе</option>
-                <option value="role">Роли</option>
-                
-            </select>
-                  <select id="sortOrder">
-                <option value="asc">По возрастанию</option>
-                <option value="desc">По убыванию</option>
-            </select>
-            <button id="sortButton">Сортировать</button> <br>
                 <thead>
                     <tr>
                         <th>Имя</th>
@@ -41,7 +24,6 @@ export default class extends AbstractView {
                         <th>Удалить</th>
                     </tr>
                 </thead>
-
                 <tbody id="abonentsTableBody"></tbody>
             </table>
                                     <button id="addSubscriberBtn" class="button button1">Добавить нового абонента</button>
@@ -81,56 +63,44 @@ export default class extends AbstractView {
 
     }
 
-
     async executeViewScript() {
         const addSubscriberBtn = document.getElementById('addSubscriberBtn');
         const subscriberForm = document.getElementById('subscriberForm');
         const editSubscriberForm = document.getElementById('editSubscriberForm');
-        const sortButton = document.getElementById('sortButton');
-        sortButton.addEventListener('click', () => {
-            const sortBy = document.getElementById('sortBy').value;
-            const sortOrder = document.getElementById('sortOrder').value;
 
-            // Get abonents' data from localStorage
-            const abonents = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const name = localStorage.key(i);
-                const data = localStorage.getItem(name);
-                try {
-                    const abonent = JSON.parse(data);
-                    abonents.push({ name, ...abonent });
-                } catch (error) {
-                    console.error("Ошибка при парсинге JSON:", error);
+        addSubscriberBtn.addEventListener('click', () => {
+            subscriberForm.style.display = 'block';
+            editSubscriberForm.style.display = 'none';
+        });
+
+        subscriberForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const category = document.getElementById('category').value;
+            const role = document.getElementById('role').value;
+            const address = document.getElementById('address').value;
+            const password = document.getElementById('password').value; // Получаем пароль из поля ввода
+            const abonent = { mail: email || "", phone: phone || "", address: address || "", role: role || "", category: category || "", surname: surname || "" };
+
+            // Если роль "администратор", запросить пароль у пользователя
+            if (role === "администратор") {
+                prompt("Введите пароль для учетной записи администратора:");
+                // Сохраняем логин и пароль в localStorage
+                localStorage.setItem('name', name);
+                localStorage.setItem('password', password);
+                localStorage.setItem('role', role);
+
+                return; // Прерываем выполнение функции, чтобы данные не сохранялись
                 }
-            }
 
-            // Sort the abonents array based on the selected criteria
-            abonents.sort((a, b) => {
-                const aValue = a[sortBy] || '';
-                const bValue = b[sortBy] || '';
-                if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-                if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-                return 0;
-            });
+            localStorage.setItem(name, JSON.stringify(abonent));
+            subscriberForm.reset();
+            subscriberForm.style.display = 'none';
+            this.renderAbonentsTable();
 
-            // Render the sorted abonents in the table
-            const abonentsTableBody = document.getElementById('abonentsTableBody');
-            abonentsTableBody.innerHTML = '';
-            abonents.forEach(abonent => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${abonent.name}</td>
-                <td>${abonent.surname}</td>
-                <td>${abonent.mail}</td>
-                <td>${abonent.phone}</td>
-                <td>${abonent.address}</td>
-                <td>${abonent.category}</td>
-                <td>${abonent.role}</td>
-                <td><button class="editBtn" data-name="${abonent.name}">Редактировать</button></td>
-                <td><button class="deleteBtn" data-name="${abonent.name}">Удалить</button></td>
-            `;
-                abonentsTableBody.appendChild(row);
-            });
         });
 
         this.renderAbonentsTable();
@@ -205,12 +175,7 @@ export default class extends AbstractView {
                     alert('Ошибка: Абонент не найден в localStorage.');
                 }
             });
-            abonents.sort((a, b) => {
-                const aValue = a[sortBy] || '', bValue = b[sortBy] || '';
-                if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-                if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-                return 0;
-            });
+
         });
 
 // Добавляем обработчик события submit только один раз за пределы цикла forEach

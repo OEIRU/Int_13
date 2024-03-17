@@ -80,7 +80,7 @@ p {
 /* Hover-эффект для кнопок */
 .button1:hover,
 #addSubscriberBtn:hover {
-    background-color: white;
+    background-color: #04AA6D;
     color: black;
     text-align: center;
     text-decoration: none;
