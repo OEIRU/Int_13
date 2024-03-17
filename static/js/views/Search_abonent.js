@@ -10,6 +10,7 @@ export default class extends AbstractView {
         return `
 
         <link rel="stylesheet" href="../../css/signupform.css">
+        <link rel="stylesheet" href="../../css/search.css">
 
         <h1>Осуществляйте поиск других абонентов!</h1>
         <form action="" class="search-bar">

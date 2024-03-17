@@ -1,3 +1,4 @@
+
 * {
     border: 0;
     box-sizing: border-box;
@@ -15,7 +16,8 @@
   .search-bar {
     display: flex;
   }
-  
+
+
   .search-bar input,
   .search-btn, 
   .search-btn:before, 
@@ -148,6 +150,7 @@
     .search-btn {
       background: #f1f1f1;
     }
+
   }
 
  
