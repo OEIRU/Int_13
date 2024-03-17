@@ -1,15 +1,16 @@
 import AbstractView from "./AbstractView.js";
-export default class extends AbstractView{
-    constructor(){
+
+export default class extends AbstractView {
+    constructor() {
         super();
         this.setTitle("Поиск");
     }
 
-    async getHtml(){
+    async getHtml() {
         return `
-        
+
         <link rel="stylesheet" href="../../css/signupform.css">
-        
+
         <h1>Осуществляйте поиск других абонентов!</h1>
         <form action="" class="search-bar">
         <input type="text" name="search" required>
@@ -24,12 +25,14 @@ export default class extends AbstractView{
       <br>
       <div align="center" id="phone"></div>
       <br>
-      <div align="center" id="category"></div>
+      <div align="center" id="groups"></div>
         `;
     }
 
-    async executeViewScript(){ 
-        const form = document.querySelector('form')
+    async executeViewScript() {
+        const form = document.querySelector('form');
+        const userCardContainer = document.getElementById('userCardsContainer');
+
         form.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(form);
@@ -46,8 +49,8 @@ export default class extends AbstractView{
             document.getElementById('name').innerHTML= "Имя: " + subscriber.name;
             document.getElementById('mail').innerHTML= "Электронная почта: " + subscriber.mail;
             document.getElementById('phone').innerHTML= "Телефон: " + subscriber.phone;
-            if (subscriber.category == undefined)document.getElementById('category').innerHTML= "Группы: " + "не состоит";
-            else document.getElementById('category').innerHTML= "Группы: " + subscriber.category;
+            if (subscriber.groups == undefined)document.getElementById('groups').innerHTML= "Группы: " + "не состоит";
+            else document.getElementById('groups').innerHTML= "Группы: " + subscriber.groups;
       }
         })
   

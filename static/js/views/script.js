@@ -5,10 +5,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    surname: { // Добавляем поле "фамилия"
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true
@@ -22,7 +18,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     address: {
-        type: String,
+        type: String, // или другой тип данных, который соответствует вашим требованиям
         required: true
     }
 });
@@ -42,15 +38,11 @@ fetch("https://jsonplaceholder.typicode.com/users")
             const header = card.querySelector("[data-header]");
             const body = card.querySelector("[data-body]");
             const role = card.querySelector("[data-role]");
-            const address = card.querySelector("[data-address]");
-            const surname = card.querySelector("[data-surname]"); // Получаем элемент для фамилии
-            const category = card.querySelector("[data-category]"); // Получаем элемент для категории
+            const address = card.querySelector("[data-address]"); // Добавляем поиск элемента для адреса
             header.textContent = user.name;
-            surname.textContent = user.surname; // Устанавливаем фамилию
             body.textContent = user.email;
             role.textContent = user.role;
-            address.textContent = user.address;
-            category.textContent = user.category; // Устанавливаем категорию
+            address.textContent = user.address; // Устанавливаем адрес
             userCardContainer.append(card);
         });
     });

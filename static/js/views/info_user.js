@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor() {
         super();
-        this.setTitle("Общая таблица абонентов");
+        this.setTitle("Управление абонентами");
     }
 
     // Метод для получения HTML-разметки страницы
@@ -13,47 +13,42 @@ export default class extends AbstractView {
 
         // Формируем HTML-разметку для таблицы
         let tableHtml = `
-        <h1>Общая таблица абонентов</h1>
-        <table class="abonents-table">
-            <thead>
+            <h1>Управление абонентами</h1>
+            <table>
                 <tr>
                     <th>Имя</th>
                     <th>Электронная почта</th>
                     <th>Мобильный телефон</th>
-                    <th>Адрес</th>
-                </tr>
-            </thead>
-            <tbody>`;
+                    <th>Категория</th> 
+                    <th>Адрес</th> 
+                </tr>`;
 
-        // Добавляем строки таблицы для каждого абонента
-        allEntries.forEach(entry => {
-            const [name, data] = entry;
-            try {
-                const abonent = JSON.parse(data);
 
-                // Проверяем роль абонента
-                if (abonent.role !== "администратор" && abonent.role !== "суперадмин") {
-                    const mail = abonent.mail ? abonent.mail : "-";
-                    const phone = abonent.phone ? abonent.phone : "-";
-                    const address = abonent.address ? abonent.address : "-";
-                    tableHtml += `
-                    <tr>
-                        <td>${name}</td>
-                        <td>${mail}</td>
-                        <td>${phone}</td>
-                        <td>${address}</td>
-                    </tr>`;
-                }
-            } catch (error) {
-                console.error("Ошибка при парсинге JSON:", error);
-            }
-        });
+    // Метод для выполнения скрипта на странице
+    async executeViewScript() {
+        // Функция для редактирования абонента
+        window.editAbonent = (name) => {
+            // Получаем данные абонента из localStorage
+            const storedData = localStorage.getItem(name);
 
-        // Закрываем таблицу
-        tableHtml += `
-            </tbody>
-        </table>`;
-
-        return tableHtml;
+            // Проверяем наличие данных и открываем форму редактирования
+            if (storedData) {
+                try {
+                    const abonent = JSON.parse(storedData);
+                    const editFormHtml = `
+                        <h2>Редактирование данных абонента ${name}</h2>
+                        <form id="editForm">
+                            <label for="mail">Электронная почта</label>
+                            <input id="mail" name="mail" type="text" value="${abonent.mail}" autocomplete="on" required>
+                            <label for="phone">Мобильный телефон</label>
+                            <input id="phone" name="phone" type="text" value="${abonent.phone}" autocomplete="on" required>
+                            <label for="category">Категория</label>
+                            <input id="category" name="category" type="text" value="${abonent.category}" autocomplete="on" required>
+                            <label for="address">Адрес</label>
+                            <input id="address" name="address" type="text" value="${abonent.address}" autocomplete="on" required>
+                            <button type="submit">Сохранить изменения</button>
+                        </form>`;
+                    document.getElementById("view").innerHTML = editFormHtml;
+        };
     }
 }

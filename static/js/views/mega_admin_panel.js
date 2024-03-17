@@ -79,15 +79,16 @@ export default class extends AbstractView {
             if (role === "администратор") {
                 const enteredPassword = prompt("Введите пароль для учетной записи администратора:");
                 // Сохраняем логин и пароль в localStorage
-                localStorage.setItem('adminLogin', enteredLogin);
-                localStorage.setItem('adminPassword', enteredPassword);
-                    return; // Прерываем выполнение функции, чтобы данные не сохранялись
+                localStorage.setItem('name', name);
+                localStorage.setItem('password', password);
+                localStorage.setItem('role', role);
+
+                return; // Прерываем выполнение функции, чтобы данные не сохранялись
                 }
 
             localStorage.setItem(name, JSON.stringify(abonent));
             subscriberForm.reset();
             subscriberForm.style.display = 'none';
-            this.renderAbonentsTable();
         });
 
         this.renderAbonentsTable();

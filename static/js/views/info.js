@@ -19,6 +19,8 @@ export default class extends AbstractView {
                     <th>Имя</th>
                     <th>Электронная почта</th>
                     <th>Мобильный телефон</th>
+                    <th>Категория</th> <!-- Новая ячейка для категории -->
+                    <th>Адрес</th> <!-- Новая ячейка для адреса -->
                     <th>Действия</th>
                 </tr>`;
 
@@ -32,6 +34,8 @@ export default class extends AbstractView {
                         <td>${name}</td>
                         <td>${abonent.mail}</td>
                         <td>${abonent.phone}</td>
+                        <td>${abonent.category}</td> <!-- Отображаем категорию -->
+                        <td>${abonent.address}</td> <!-- Отображаем адрес -->
                         <td><button onclick="editAbonent('${name}')">Редактировать</button></td>
                     </tr>`;
             } catch (error) {
@@ -63,6 +67,10 @@ export default class extends AbstractView {
                             <input id="mail" name="mail" type="text" value="${abonent.mail}" autocomplete="on" required>
                             <label for="phone">Мобильный телефон</label>
                             <input id="phone" name="phone" type="text" value="${abonent.phone}" autocomplete="on" required>
+                            <label for="category">Категория</label>
+                            <input id="category" name="category" type="text" value="${abonent.category}" autocomplete="on" required>
+                            <label for="address">Адрес</label>
+                            <input id="address" name="address" type="text" value="${abonent.address}" autocomplete="on" required>
                             <button type="submit">Сохранить изменения</button>
                         </form>`;
                     document.getElementById("view").innerHTML = editFormHtml;
