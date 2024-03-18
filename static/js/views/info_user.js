@@ -14,7 +14,6 @@ export default class extends AbstractView {
             <select id="sortBy">
                 <option value="name">Имени</option>
                 <option value="surname">Фамилии</option>
-                <option value="email">Электронной почте</option>
                 <option value="phone">Мобильному телефону</option>
                 <option value="address">Адресу</option>
                 <option value="category">Группе</option>
@@ -30,7 +29,6 @@ export default class extends AbstractView {
                 <tr>
                     <th>Имя</th>
                     <th>Фамилия</th>
-                    <th>Электронная почта</th>
                     <th>Мобильный телефон</th>
                     <th>Адрес</th>
                     <th>Группа</th>
@@ -91,7 +89,6 @@ export default class extends AbstractView {
             row.innerHTML = `
                 <td>${abonent.name || '-'}</td>
                 <td>${abonent.surname || '-'}</td>
-                <td>${abonent.email || '-'}</td>
                 <td>${abonent.phone || '-'}</td>
                 <td>${abonent.address || '-'}</td>
                 <td>${abonent.category || '-'}</td>

@@ -13,7 +13,8 @@ input[type=text],
 input[type=password],
 input[type=email],
 input[type=tel],
-#role {
+#role,
+#editRole {
   padding: 15px;
   margin: 5px 0 22px 0;
   display: inline-block;
@@ -143,4 +144,41 @@ button2:hover,
 
 .sort-menu select {
   margin-right: 8px;
+}
+/* Стили для таблиц */
+.abonents-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.abonents-table th,
+.abonents-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
+.abonents-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+/* Стили для скроллируемой таблицы */
+.scrollable-table {
+  width: 100%; /* Ширина таблицы занимает всю доступную ширину */
+  border-collapse: collapse; /* Объединение границ ячеек */
+  overflow-y: auto; /* Включение вертикального скролла */
+  max-height: 500px; /* Максимальная высота таблицы, при достижении которой появится скролл */
+}
+
+/* Optional: Стили для заголовка таблицы */
+.abonents-table thead th {
+  background-color: #f2f2f2; /* Цвет фона заголовка */
+  position: sticky; /* Зафиксировать заголовок при прокрутке */
+  top: 0; /* Закрепить заголовок вверху */
+  z-index: 1; /* Установить порядок слоя, чтобы заголовок был поверх содержимого */
+}
+
+/* Optional: Стили для ячеек таблицы */
+.abonents-table tbody td {
+  background-color: #fff; /* Цвет фона ячеек */
 }

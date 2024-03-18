@@ -34,16 +34,7 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Стили для контейнера приложения */
-#app {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-35%, -100%);
-    line-height: 1.5;
-    font-weight: 500;
-    text-align: center; /* Выравниваем текст по центру */
-}
+
 
 /* Стили для общих ссылок */
 a {
@@ -127,12 +118,12 @@ p {
     text-align: left;
 }
 
-#role {
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
-    background: #f1f1f1;
-    font: 1em Hind, sans-serif; /* Добавляем указание на шрифт */
-    line-height: 1.5em;
+#adminLoginForm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-35%, -100%);
+    line-height: 1.5;
+    font-weight: 500;
 }
+/* text-align: center;

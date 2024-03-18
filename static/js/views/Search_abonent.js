@@ -77,7 +77,6 @@ export default class extends AbstractView {
         <div align="center">
             <p>Имя: ${name}</p>
             <p>Фамилия: ${subscriber.surname ? subscriber.surname : 'отсутствует'}</p>
-            <p>Электронная почта: ${subscriber.mail ? subscriber.mail : 'отсутствует'}</p>
             <p>Телефон: ${subscriber.phone ? subscriber.phone : 'отсутствует'}</p>
             <p>Группы: ${subscriber.category ? subscriber.category : 'не состоит'}</p>
         </div>

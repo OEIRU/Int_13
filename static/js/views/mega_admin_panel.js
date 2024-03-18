@@ -10,12 +10,11 @@ export default class extends AbstractView {
         return `
             <h1>Общая таблица абонентов</h1>
 
-            <table class="abonents-table">
+                <table class="abonents-table scrollable-table">
                 <thead>
                     <tr>
                         <th>Имя</th>
                         <th>Фамилия</th>
-                        <th>Электронная почта</th>
                         <th>Мобильный телефон</th>
                         <th>Адрес</th>
                         <th>Группа</th>
@@ -26,12 +25,11 @@ export default class extends AbstractView {
                 </thead>
                 <tbody id="abonentsTableBody"></tbody>
             </table>
-                                    <button id="addSubscriberBtn" class="button button1">Добавить нового абонента</button>
+            <button id="addSubscriberBtn" class="button button1">Добавить нового абонента</button>
 
             <form id="subscriberForm" style="display: none;">
                 <input type="text" id="name" placeholder="Имя" required>
                 <input type="text" id="surname" placeholder="Фамилия">
-                <input type="email" id="email" placeholder="Электронная почта">
                 <input type="tel" id="phone" placeholder="Мобильный телефон" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/\\D/g, '').substring(0, 11);" onfocus="if(this.value==='') this.value = '+7';">
                 <input type="text" id="address" placeholder="Адрес">
                 <input type="text" id="category" placeholder="Категория">
@@ -46,15 +44,16 @@ export default class extends AbstractView {
             </form>
             <form id="editSubscriberForm" style="display: none;">
                 <input type="text" id="editName" placeholder="Имя" required disabled>
-                <input type="email" id="editEmail" placeholder="Электронная почта">
+                <input type="text" id="editSurname" placeholder="Фамилия">
                 <input type="tel" id="editPhone" placeholder="Мобильный телефон" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/\\D/g, '').substring(0, 11);" onfocus="if(this.value==='') this.value = '+7';">
                 <input type="text" id="editAddress" placeholder="Адрес">
+                <input type="text" id="editCategory" placeholder="Категория">
                 <select id="editRole">
                     <option value="" disabled selected>Выберите роль</option>
                     <option value="пользователь">Пользователь</option>
                     <option value="администратор">Администратор</option>
                 </select>
-                <input type="password" id="password" placeholder="Пароль">
+                <input type="password" id="password" placeholder="Пароль (для нового администратора)">
 
                 <button type="submit">Сохранить</button>
             </form>
@@ -77,29 +76,48 @@ export default class extends AbstractView {
             event.preventDefault();
             const name = document.getElementById('name').value;
             const surname = document.getElementById('surname').value;
-            const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
             const category = document.getElementById('category').value;
             const role = document.getElementById('role').value;
-            const address = document.getElementById('address').value;
             const password = document.getElementById('password').value; // Получаем пароль из поля ввода
-            const abonent = { mail: email || "", phone: phone || "", address: address || "", role: role || "", category: category || "", surname: surname || "" };
+            const abonent = {
+                surname: surname || "",
+                phone: phone || "",
+                address: address || "",
+                category: category || "",
+                role: role || "",
+            };
 
             // Если роль "администратор", запросить пароль у пользователя
             if (role === "администратор") {
-                prompt("Введите пароль для учетной записи администратора:");
-                // Сохраняем логин и пароль в localStorage
-                localStorage.setItem('name', name);
-                localStorage.setItem('password', password);
-                localStorage.setItem('role', role);
+                const adminPassword = prompt("Введите пароль для учетной записи администратора:");
+                if (adminPassword) { // Проверяем, был ли введен пароль
+                    // Сохраняем логин и пароль в localStorage
+                    localStorage.setItem('name', name);
+                    localStorage.setItem('password', adminPassword);
+                    localStorage.setItem('role', role);
 
-                return; // Прерываем выполнение функции, чтобы данные не сохранялись
+                    // Обновляем данные абонента в localStorage
+                    const abonent = {
+                        surname: surname || "",
+                        phone: phone || "",
+                        address: address || "",
+                        category: category || "",
+                        role: role || "",
+                    };
+                    localStorage.setItem(name, JSON.stringify(abonent));
+
+                    // Перерисовываем таблицу абонентов
+                    this.renderAbonentsTable();
                 }
+                return; // Прерываем выполнение функции, чтобы данные не сохранялись
+            }
 
             localStorage.setItem(name, JSON.stringify(abonent));
-            subscriberForm.reset();
-            subscriberForm.style.display = 'none';
-            this.renderAbonentsTable();
+            subscriberForm.reset(); // Сбросить форму добавления абонента
+            subscriberForm.style.display = 'none'; // Скрыть форму добавления абонента
+            this.renderAbonentsTable(); // Обновить таблицу абонентов
 
         });
 
@@ -116,12 +134,12 @@ export default class extends AbstractView {
 
             try {
                 const abonent = JSON.parse(data);
+                const surname = abonent.surname || "-";
                 const mail = abonent.mail || "-";
                 const category = abonent.category || "-";
                 const phone = abonent.phone || "-";
                 const address = abonent.address || "-";
                 const role = abonent.role || "-";
-                const surname = abonent.surname || "-";
 
                 // Исключаем суперадмина из таблицы
                 if (role !== "суперадмин") {
@@ -129,7 +147,6 @@ export default class extends AbstractView {
                     row.innerHTML = `
                 <td>${name}</td>
                 <td>${surname}</td>
-                <td>${mail}</td>
                 <td>${phone}</td>
                 <td>${address}</td>
                 <td>${category}</td>
@@ -147,7 +164,6 @@ export default class extends AbstractView {
         }
 
 
-
         const editButtons = document.querySelectorAll('.editBtn');
         editButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -156,15 +172,21 @@ export default class extends AbstractView {
                 if (abonentData) {
                     const abonent = JSON.parse(abonentData);
                     const editNameInput = document.getElementById('editName');
-                    const editEmailInput = document.getElementById('editEmail');
+                    const editSurnameInput = document.getElementById('editSurname');
                     const editPhoneInput = document.getElementById('editPhone');
                     const editAddressInput = document.getElementById('editAddress');
+                    const editCategoryInput = document.getElementById('editCategory');
                     const editRoleSelect = document.getElementById('editRole');
 
                     editNameInput.value = name;
-                    editEmailInput.value = abonent.mail || '';
+
+                    editSurnameInput.value = abonent.surname || '';
+
                     editPhoneInput.value = abonent.phone || '';
                     editAddressInput.value = abonent.address || '';
+                    editCategoryInput.value = abonent.category || ''; // Значение категории
+                    editCategoryInput.dataset.originalCategory = abonent.category || ''; // Добавляем атрибут с оригинальной категорией
+
                     editRoleSelect.value = abonent.role || '';
 
                     const editSubscriberForm = document.getElementById('editSubscriberForm');
@@ -186,17 +208,19 @@ export default class extends AbstractView {
             const name = editNameInput.value;
             const abonentData = localStorage.getItem(name);
             if (abonentData) {
-                const editEmailInput = document.getElementById('editEmail');
+                const editSurnameInput = document.getElementById('editSurname');
                 const editPhoneInput = document.getElementById('editPhone');
                 const editAddressInput = document.getElementById('editAddress');
+                const editCategoryInput = document.getElementById('editCategory');
                 const editRoleSelect = document.getElementById('editRole');
 
-                const newEmail = editEmailInput.value;
+                const newSurname = editSurnameInput.value;
                 const newPhone = editPhoneInput.value;
                 const newAddress = editAddressInput.value;
+                const newCategory = editCategoryInput.value;
                 const newRole = editRoleSelect.value;
 
-                const updatedAbonent = { mail: newEmail, phone: newPhone, address: newAddress, role: newRole };
+                const updatedAbonent = {surname: newSurname, phone: newPhone, address: newAddress, category: newCategory, role: newRole};
                 localStorage.setItem(name, JSON.stringify(updatedAbonent));
 
                 // Удаляем старый элемент только если имя было изменено
